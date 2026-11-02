@@ -1,0 +1,36 @@
+pipeline {
+  agent any
+  stages {
+    stage('Checkout') {
+      steps {
+        checkout scm
+      }
+    }
+    stage('Build') {
+      steps {
+        sh 'echo Build step'
+        sh 'ls -la'
+      }
+    }
+    stage('Test') {
+      steps {
+        sh 'echo Tests passed'
+      }
+    }
+    stage('Package') {
+      steps {
+        sh 'mkdir -p dist && echo artifact > dist/output.txt'
+      }
+    }
+    stage('Approval') {
+      steps {
+        input message: 'Continue to staging?', ok: 'Approve'
+      }
+    }
+    stage('Staging') {
+      steps {
+        echo 'Approval received'
+      }
+    }
+  }
+}
